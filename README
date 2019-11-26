@@ -1,0 +1,168 @@
+seanco
+
+================================================
+1. java files not mentioned at instructions:
+================================================
+- LinkedListInstance -  The class wrapping the linked-list objects in order to allow operate the linked lists
+   as instances in an array. The class used by the OpenHashSet in order to save linked lists at the hash
+   table cells.
+   Its methods are regular methods of linked list, bridge between the openHashSet and the real linked list.
+   The methods: add, remove, contains, get(obj by index) and size.
+
+=============================
+2. OpenSet implementation:
+=============================
+I chose to implement OpenHashSet ass an array of LinkedLists.
+The LinkedLists array is the hash table, and each cell holds a linked list, wrapped by a wrapper called
+LinkedListInstance. Each time the array initialized by linked lists instances in each cell.
+Objects that has same hash value, been saved at the same linked list that belongs to this value.
+
+==================================
+3. Deletion mechanism in closeSet;
+==================================
+I used the empty string " " as a mark of deleted cells. Moreover, I defined it as a new string and checked
+for received inputs if the input "==" to the empty string mark in order to know if it is the mark itself or
+ an input string " " as a word in the list. When re-hashing, the deletion marks are ignored.
+
+=============================
+Analysis results:
+=============================
+
+Initial data1 structures with data1 (ms):
+
+OpenHashSet = 20180
+ClosedHashSet = 159073
+TreeSet = 59
+LinkedList = 34345
+** HashSet = 52 **
+
+Initial data2 structures with data1 (ms):
+
+OpenHashSet = 88
+ClosedHashSet = 98
+TreeSet = 109
+LinkedList = 28389
+** HashSet = 57 **
+
+______________________________________________________
+Data structure | data1 initialize | data2 initialize.|
+------------------------------------------------------
+OpenHashSet    | 20180            | 88               |
+------------------------------------------------------
+ClosedHashSet  | 159073           | 98               |
+------------------------------------------------------
+TreeSet        | 59               | 109              |
+------------------------------------------------------
+LinkedList     | 34345            | 28389            |
+------------------------------------------------------
+JavaHashSet    | 52               | 57               |
+------------------------------------------------------
+
+Check if "hi" is contained in the data structures initialized with data1 (ns):
+** OpenHashSet = 19 **
+ClosedHashSet = 21
+TreeSet = 96
+LinkedList = 457185
+HashSet = 56
+
+Check if "-13170890158" is contained in the data structures initialized with data1 (ns):
+OpenHashSet = 299206
+ClosedHashSet = 3149343
+TreeSet = 201
+LinkedList = 527066
+** HashSet = 54 **
+
+Data structures initialized with data1:
+___________________________________________________________
+Data structure | contains "hi"  | contains "-13170890158" |
+-----------------------------------------------------------
+OpenHashSet    | 19             | 299206                  |
+-----------------------------------------------------------
+ClosedHashSet  | 21             | 3149343                 |
+-----------------------------------------------------------
+TreeSet        | 96             | 201                     |
+-----------------------------------------------------------
+LinkedList     | 457185         | 527066                  |
+-----------------------------------------------------------
+JavaHashSet    | 56             | 54                      |
+-----------------------------------------------------------
+
+Check if "23" is contained in the data structures initialized with data2:
+** OpenHashSet = 15 **
+ClosedHashSet = 34
+TreeSet = 115
+LinkedList = 307
+HashSet = 26
+
+Check if "hi" is contained in the data structures initialized with data2:
+OpenHashSet = 30
+ClosedHashSet = 401
+TreeSet = 116
+LinkedList = 632018
+** HashSet = 20 **
+
+Data structures initialized with data2:
+___________________________________________________________
+Data structure | contains "23"  | contains "hi"           |
+-----------------------------------------------------------
+OpenHashSet    | 15             | 30                      |
+-----------------------------------------------------------
+ClosedHashSet  | 34             | 401                     |
+-----------------------------------------------------------
+TreeSet        | 115            | 116                     |
+-----------------------------------------------------------
+LinkedList     | 307            | 632018                  |
+-----------------------------------------------------------
+JavaHashSet    | 26             | 20                      |
+-----------------------------------------------------------
+
+=============================
+Results discussion:
+=============================
+1. Data1 inserting bad results:
+- OpenHashSet - The bad result for initializing the open hash set with data1 is cause of the "contains"
+ check that performed before each add action, in order to check if each object is not already in the set. So
+ for data1, the words with the same hash code inserted to the same link list and for each new word, it
+ takes O(n) to check at the linked list if it contains the new word.
+- ClosedHashSet - Words with same calculated hash value are tried to sent to same cell. If the cell is
+ full, there will be new hash values each iterate, but for same hash value words, it is stiil same
+ calculated hash value. So for each word, it is O(n) to check if already exist, and if not, another O(n) in
+ order to insert it (has to pass all the same hash value words).
+
+2. Strengths and Weaknesses:
+- OpenHashSet: Strength: This set can check really fast if object is contained to it, and insert data at
+ good time as well, if there are vary of objects and not many objects with same hash value.
+ The weaknesses are manage data when there is a large amount with the same hash value.
+ The open set is good for lists no very dynamic with varied objects, like archives, when there are many
+ searches but insertion of new data is rare.
+- CloseHashSet: This set is OK with varied data but is really bad in searching and inserting data that is
+ not varied enough and contains many same hash values objects. This set is good for verified varied data
+ manage, like manage id numbers list that are unic and the chances to get the same hash values are low.
+- TreeSet: The advantage of TreeSet that it have no special weaknesses or strength. It performs good
+ running time in each scenario. Because its tree form, the worst case scenario for each action is O(log n).
+ TreeSet will be very good in manage unknown data and scenarios that we cant predict their data type or the
+ amount of insertions and searching actions.
+- LinkedList - Not a good data structure to implement a set at any case. Its advantages are the dynamic
+ insertion and deletion of objects, but in set, we need to check each time if the object is already exist,
+ and it takes O(n) at linked list. Not suitable for set.
+- JavaHashSet: Very good at any type of data manage, functions best with varied data but also with unvaried
+ data its performances are great. I assumed that in order to be great performer, the java hash set uses
+ lots of memory, so I will use it for small-medium sized data, and big data only if is really dynamic and
+ the speed is important.
+
+3. My implementations:
+- Between themselves, my OpenHashSet is better then the closed. I think that the good speed of insertion
+objects to the linked list at the open set are make the difference, as well the over hash code calculations
+ that the closed set do in case of same hash objects are affect.
+
+4. My implementations compare to Java set:
+- The Java set is better then the closed set in every aspect. But the open set gives a good fight and
+ sometimes make better performance specially in searching for values among varied data.
+
+5. Surprises and expectations:
+- I surprised that the OpenSet performed better when searching for value in a varied data data base, or
+when the value is not exist. I expected to bad performance of the closed set when inserting data.
+
+6. Java Hash set:
+- I find it very surprising the performance of java hash set with the data1 data base. It was really
+strange to me that it performed so well.
